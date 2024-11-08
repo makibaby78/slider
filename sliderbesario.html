@@ -194,17 +194,20 @@
 
             const arrows = carouselWrapper.querySelector(`.arrow-wrapper`);
             
-            let quantity;
-
+            //Determine screen width
             const mediaQuery640 = window.matchMedia('(max-width: 640px)');
             const mediaQuery768 = window.matchMedia('(max-width: 768px)');
+            let quantity;
 
-            if (mediaQuery640.matches) {
-                quantity = responsiveQuantity[2];
-            } else if (mediaQuery768.matches) {
-                quantity = responsiveQuantity[1];
-            } else {
-                quantity = responsiveQuantity[0];
+            switch (true) {
+                case mediaQuery640.matches:
+                    quantity = responsiveQuantity[2];
+                    break;
+                case mediaQuery768.matches:
+                    quantity = responsiveQuantity[1];
+                    break;
+                default:
+                    quantity = responsiveQuantity[0];
             }
 
             car.style.gridAutoColumns = `calc(100% / ${quantity})`;
@@ -217,13 +220,7 @@
             const carouselChildren = [...car.children];
             
             // Insert copies of the last few cards to beginning of carousel for infinite scrolling
-            let addCard;
-
-            if(quantity > 1){
-                addCard = quantity;
-            } else {
-                addCard = 2;
-            }
+            let addCard = quantity > 1 ? quantity : 2;
 
             carouselChildren
                 .slice(-addCard)
@@ -238,13 +235,7 @@
             });
 
             car.classList.add("no-transition");
-
-            if(quantity > 1){
-                car.scrollLeft = car.offsetWidth - (padding * 2);
-            } else {
-                car.scrollLeft = firstCardWidth * 2;
-            }
-            
+            car.scrollLeft = quantity > 1 ? car.offsetWidth - (padding * 2) : firstCardWidth * 2;
             car.classList.remove("no-transition");
             
             //Arrows Functionalities
