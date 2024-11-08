@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .carousel-outer {
+            width: 100%;
+            position: relative;
+            margin: auto;
+        }
+        .carousel {
+            display: grid;
+            grid-auto-flow: column;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            position: relative;
+        }
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+        .carousel.dragging {
+            scroll-snap-type: none;
+            scroll-behavior: auto;
+        }
+        .card {
+            background-color: transparent;
+            cursor: grab;
+            user-select: none;
+        }
+        .item {
+            padding-right: 5px;
+            padding-left: 5px;
+            width: 100%;
+            height: 100%;
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel.no-transition {
+            scroll-behavior: auto;
+        }
+
+        .arrow-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .arrow-wrapper > i {
+            height: 50px;
+            width: 50px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            text-align: center;
+            line-height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.23);
+            transition: transform 0.1s linear;
+        }
+        .arrow-wrapper > i:active {
+            transform: scale(0.85);
+        }
+
+        .sliding {
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+<section class="w-full">
+    <div class="carousel-outer" id="carousel-1">
+        <div class="carousel">
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/03/50/40/93/240_F_350409330_2bqhjowfBmrqEia5U8lBsGrvD7h8EIo6.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/00/57/55/40/240_F_57554079_g3LhdDR5C0f2mc2ZxjFgsbb6WMqouUwQ.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/06/15/91/36/240_F_615913669_1GvdMMT0H44Z4owh9SCYsml6mCcy8g3G.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/02/60/67/80/240_F_260678009_gV1PBTotxDIwTngnmn3nYqWshbznYf24.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/03/99/91/62/240_F_399916297_1JwXdmC6ViCG4YhZuhLVz7xfuZhfHCY9.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+        </div>
+        <div class="arrow-wrapper">
+            <i id="left" class="fa-solid fa-angle-left"></i>
+            <i id="right" class="fa-solid fa-angle-right"></i>
+        </div>
+    </div>
+</section>
+<br/>
+<br/>
+<section class="w-full">
+    <div class="carousel-outer" id="carousel-2">
+        <div class="carousel">
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/03/50/40/93/240_F_350409330_2bqhjowfBmrqEia5U8lBsGrvD7h8EIo6.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/00/57/55/40/240_F_57554079_g3LhdDR5C0f2mc2ZxjFgsbb6WMqouUwQ.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/06/15/91/36/240_F_615913669_1GvdMMT0H44Z4owh9SCYsml6mCcy8g3G.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/02/60/67/80/240_F_260678009_gV1PBTotxDIwTngnmn3nYqWshbznYf24.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t3.ftcdn.net/jpg/03/99/91/62/240_F_399916297_1JwXdmC6ViCG4YhZuhLVz7xfuZhfHCY9.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+            <div class="card">
+                <div class="item">
+                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
+                </div>
+            </div>
+        </div>
+        <div class="arrow-wrapper">
+            <i id="left" class="fa-solid fa-angle-left"></i>
+            <i id="right" class="fa-solid fa-angle-right"></i>
+        </div>
+    </div>
+</section>
+    <script>
+        // check if it's a touch device otherwise it will be the usual click
+        let onClick = 'ontouchstart' in window ? 'touchend' : 'click';
+
+        function initiateCarousel(wrapper, quantity = 3, padding = 10) {
+            const carouselWrapper = document.querySelector(`${wrapper}`);
+            const car = carouselWrapper.querySelector(`${wrapper} .carousel`);
+  
+            const arrows = carouselWrapper.querySelector(`.arrow-wrapper`);
+        
+            car.style.gridAutoColumns = `calc(100% / ${quantity})`;
+        
+            car.style.paddingLeft = `${padding}px`;
+            car.style.paddingRight = `${padding}px`;
+        
+            const firstCardWidth = car.querySelector('.card').offsetWidth;
+            
+            const carouselChildren = [...car.children];
+            const cardPerView = Math.round((car.offsetWidth - (padding * 2)) / firstCardWidth);
+            
+            // Insert copies of the last few cards to beginning of carousel for infinite scrolling
+            carouselChildren
+                .slice(-cardPerView)
+                .reverse()
+                .forEach((card) => {
+                car.insertAdjacentHTML("afterbegin", card.outerHTML);
+            });
+        
+            // Insert copies of the first few cards to end of carousel for infinite scrolling
+            carouselChildren.slice(0, cardPerView).forEach((card) => {
+                car.insertAdjacentHTML("beforeend", card.outerHTML);
+            });
+
+            car.classList.add("no-transition");
+            car.scrollLeft = car.offsetWidth - (padding * 2);
+            car.classList.remove("no-transition");
+            
+            //Arrows Functionalities
+            if(arrows){
+                arrows.style.paddingLeft = `${padding}px`;
+                arrows.style.paddingRight = `${padding}px`;
+
+                [...arrows.children].forEach((btn) => {
+                    btn.addEventListener(onClick, (e) => {
+                        e.target.classList.add('sliding');
+
+                        setTimeout(function(){
+                            e.target.classList.remove('sliding');
+                        }, 300);
+
+                        car.scrollLeft += btn.id == "left" ? -firstCardWidth : firstCardWidth;
+                        
+                    });
+                });
+            }
+        
+            let isDragging = false,
+                startX,
+                startScrollLeft;
+        
+            const dragStart = (e) => {
+                isDragging = true;
+                car.classList.add("dragging");
+        
+                startX = e.pageX;
+        
+                startScrollLeft = car.scrollLeft;
+            };
+        
+            const dragging = (e) => {
+                if (!isDragging) return;
+                car.scrollLeft = startScrollLeft - (e.pageX - startX);
+            };
+        
+            const dragStop = () => {
+                isDragging = false;
+                car.classList.remove("dragging");
+        
+                // Automatic after dragging Placement of the cards
+                car.scrollLeft = Math.round(car.scrollLeft / firstCardWidth) * firstCardWidth;
+            };
+            
+            const infiniteScroll = () => {
+                const cardwidth = firstCardWidth;
+
+                if (car.scrollLeft <= cardwidth + 10) {
+                    car.classList.add("no-transition");
+                    car.scrollLeft = car.scrollWidth - (2 * car.offsetWidth) + (2 * padding) + cardwidth;
+                    car.classList.remove("no-transition");
+                } 
+                else if ((car.scrollWidth - car.offsetWidth) <= Math.ceil(car.scrollLeft) + firstCardWidth + 10) 
+                {   
+                    car.classList.add("no-transition");
+                    car.scrollLeft = (car.offsetWidth - firstCardWidth) - (2 * padding);
+                    car.classList.remove("no-transition");
+                }
+            };
+            
+            car.addEventListener("mousedown", dragStart);
+            car.addEventListener("mousemove", dragging);
+            document.addEventListener("mouseup", dragStop);
+            car.addEventListener("scroll", infiniteScroll);
+        }
+        
+        initiateCarousel('#carousel-1', 4, 5);
+        initiateCarousel('#carousel-2', 3, 100);
+        
+    </script>
+</body>
+</html>
