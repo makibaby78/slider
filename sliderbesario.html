@@ -86,7 +86,6 @@
     </style>
 </head>
 <body>
-<section class="w-full">
     <div class="carousel-outer" id="carousel-1">
         <div class="carousel">
             <div class="card">
@@ -119,36 +118,14 @@
                     <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
                 </div>
             </div>
-            <div class="card">
-                <div class="item">
-                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
-                </div>
-            </div>
-            <div class="card">
-                <div class="item">
-                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
-                </div>
-            </div>
-            <div class="card">
-                <div class="item">
-                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
-                </div>
-            </div>
-            <div class="card">
-                <div class="item">
-                    <img src="https://t4.ftcdn.net/jpg/06/81/01/43/240_F_681014359_dyMjwn4JYLtY985umiBOeytmLmVxEjC0.jpg" alt="img" draggable="false">
-                </div>
-            </div>
         </div>
         <div class="arrow-wrapper">
             <i id="left" class="fa-solid fa-angle-left"></i>
             <i id="right" class="fa-solid fa-angle-right"></i>
         </div>
     </div>
-</section>
 <br/>
 <br/>
-<section class="w-full">
     <div class="carousel-outer" id="carousel-2">
         <div class="carousel">
             <div class="card">
@@ -207,17 +184,29 @@
             <i id="right" class="fa-solid fa-angle-right"></i>
         </div>
     </div>
-</section>
     <script>
         // check if it's a touch device otherwise it will be the usual click
         let onClick = 'ontouchstart' in window ? 'touchend' : 'click';
 
-        function initiateCarousel(wrapper, quantity = 3, padding = 10) {
+        function initiateCarousel(wrapper, responsiveQuantity = [3, 2, 1], padding = 10) {
             const carouselWrapper = document.querySelector(`${wrapper}`);
             const car = carouselWrapper.querySelector(`${wrapper} .carousel`);
-  
+
             const arrows = carouselWrapper.querySelector(`.arrow-wrapper`);
-        
+            
+            let quantity;
+
+            const mediaQuery640 = window.matchMedia('(max-width: 640px)');
+            const mediaQuery768 = window.matchMedia('(max-width: 768px)');
+
+            if (mediaQuery640.matches) {
+                quantity = responsiveQuantity[2];
+            } else if (mediaQuery768.matches) {
+                quantity = responsiveQuantity[1];
+            } else {
+                quantity = responsiveQuantity[0];
+            }
+
             car.style.gridAutoColumns = `calc(100% / ${quantity})`;
         
             car.style.paddingLeft = `${padding}px`;
@@ -226,23 +215,36 @@
             const firstCardWidth = car.querySelector('.card').offsetWidth;
             
             const carouselChildren = [...car.children];
-            const cardPerView = Math.round((car.offsetWidth - (padding * 2)) / firstCardWidth);
             
             // Insert copies of the last few cards to beginning of carousel for infinite scrolling
+            let addCard;
+
+            if(quantity > 1){
+                addCard = quantity;
+            } else {
+                addCard = 2;
+            }
+
             carouselChildren
-                .slice(-cardPerView)
+                .slice(-addCard)
                 .reverse()
                 .forEach((card) => {
                 car.insertAdjacentHTML("afterbegin", card.outerHTML);
             });
         
             // Insert copies of the first few cards to end of carousel for infinite scrolling
-            carouselChildren.slice(0, cardPerView).forEach((card) => {
+            carouselChildren.slice(0, addCard).forEach((card) => {
                 car.insertAdjacentHTML("beforeend", card.outerHTML);
             });
 
             car.classList.add("no-transition");
-            car.scrollLeft = car.offsetWidth - (padding * 2);
+
+            if(quantity > 1){
+                car.scrollLeft = car.offsetWidth - (padding * 2);
+            } else {
+                car.scrollLeft = firstCardWidth * 2;
+            }
+            
             car.classList.remove("no-transition");
             
             //Arrows Functionalities
@@ -256,7 +258,7 @@
 
                         setTimeout(function(){
                             e.target.classList.remove('sliding');
-                        }, 300);
+                        }, 500);
 
                         car.scrollLeft += btn.id == "left" ? -firstCardWidth : firstCardWidth;
                         
@@ -290,30 +292,45 @@
                 car.scrollLeft = Math.round(car.scrollLeft / firstCardWidth) * firstCardWidth;
             };
             
+            
             const infiniteScroll = () => {
                 const cardwidth = firstCardWidth;
 
-                if (car.scrollLeft <= cardwidth + 10) {
+                if (quantity === 1 && car.scrollLeft < cardwidth) {
+                    // this is left
+                    car.classList.add("no-transition");
+                    car.scrollLeft = car.scrollWidth - ((car.offsetWidth*3) - (padding * 4));
+                    car.classList.remove("no-transition");
+                    car.scrollLeft = car.scrollLeft - cardwidth;
+
+                } else if(quantity === 1 && car.scrollWidth - (car.offsetWidth * 2) <= car.scrollLeft) {
+                    // this is right
+                    car.classList.add("no-transition");
+                    car.scrollLeft = (car.offsetWidth * 2) - (padding * 4);
+                    car.classList.remove("no-transition");
+                }
+
+                if (quantity != 1 && car.scrollLeft <= cardwidth + 10 ) {
                     car.classList.add("no-transition");
                     car.scrollLeft = car.scrollWidth - (2 * car.offsetWidth) + (2 * padding) + cardwidth;
                     car.classList.remove("no-transition");
                 } 
-                else if ((car.scrollWidth - car.offsetWidth) <= Math.ceil(car.scrollLeft) + firstCardWidth + 10) 
+                else if (quantity != 1 && (car.scrollWidth - car.offsetWidth) <= Math.ceil(car.scrollLeft) + firstCardWidth + 10) 
                 {   
                     car.classList.add("no-transition");
                     car.scrollLeft = (car.offsetWidth - firstCardWidth) - (2 * padding);
                     car.classList.remove("no-transition");
                 }
             };
-            
+
             car.addEventListener("mousedown", dragStart);
             car.addEventListener("mousemove", dragging);
             document.addEventListener("mouseup", dragStop);
             car.addEventListener("scroll", infiniteScroll);
         }
         
-        initiateCarousel('#carousel-1', 4, 5);
-        initiateCarousel('#carousel-2', 3, 100);
+        initiateCarousel('#carousel-1', [3, 2, 1], 20);
+        initiateCarousel('#carousel-2', [5, 4, 2], 20);
         
     </script>
 </body>
